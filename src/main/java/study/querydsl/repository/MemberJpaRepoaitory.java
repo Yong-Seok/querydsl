@@ -98,7 +98,7 @@ public class MemberJpaRepoaitory {
                 .fetch();
     }
 
-    public List<MemberTeamDto> searchByWhereParam(MemberSearchCondition condition) {
+    public List<MemberTeamDto> search(MemberSearchCondition condition) {
         return queryFactory
                 .select(new QMemberTeamDto(
                         member.id.as("memberId"),

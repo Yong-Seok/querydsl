@@ -1,12 +1,14 @@
 package study.querydsl.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.querydsl.dto.MemberSearchCondition;
 import study.querydsl.dto.MemberTeamDto;
 import study.querydsl.repository.MemberJpaRepoaitory;
+import study.querydsl.repository.MemberRepository;
 
 import java.util.List;
 
@@ -15,9 +17,21 @@ import java.util.List;
 public class MemberController {
 
     private final MemberJpaRepoaitory memberJpaRepoaitory;
+    private final MemberRepository memberRepository;
 
-    @RequestMapping("/v1/members")
+    @GetMapping("/v1/members")
     public List<MemberTeamDto> searchMemberV1(MemberSearchCondition condition) {
-        return memberJpaRepoaitory.searchByWhereParam(condition);
+        return memberJpaRepoaitory.search(condition);
+    }
+
+    @GetMapping("/v2/members")
+    public Page<MemberTeamDto> searchMemberV2(MemberSearchCondition condition, Pageable pageable) {
+        return memberRepository.searchPageSimple(condition, pageable);
+    }
+
+    @GetMapping("/v3/members")
+    public Page<MemberTeamDto> searchMemberV3(MemberSearchCondition condition, Pageable pageable) {
+        // pageable size 전체 대상보다 클 경우 Count Query 제외
+        return memberRepository.searchPageComplex(condition, pageable);
     }
 }
