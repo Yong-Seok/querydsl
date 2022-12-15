@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 @Repository
 @Getter
-public class QuerydslForRepositorySupport {
+public abstract class QuerydslForRepositorySupport {
 
     private final Class domainClass;
     private Querydsl querydsl;
